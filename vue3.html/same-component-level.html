@@ -1,0 +1,44 @@
+<div id="app">
+  <!-- view 내부적으로 kebab-case로 처리 필요 (=appTitle과 연결) -->
+  <app-header :app-title="message"></app-header>
+  <app-contents @login="receive"></app-contents>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const appHeader = {
+    props: ["appTitle"],
+    template: "<h1>{{ appTitle }}</h1>",
+  };
+
+  const appContents = {
+    template: `
+      <p>
+        <button @click="sendEvent">로그인</button>
+      </p>
+    `,
+    methods: {
+      sendEvent() {
+        this.$emit("login");
+      },
+    },
+  };
+
+  // root
+  Vue.createApp({
+    data() {
+      return {
+        message: "",
+      };
+    },
+    methods: {
+      receive() {
+        this.message = "로그인 성공";
+      },
+    },
+    components: {
+      "app-header": appHeader,
+      "app-contents": appContents,
+    },
+  }).mount("#app");
+</script>
